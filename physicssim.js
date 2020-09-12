@@ -37,22 +37,23 @@ var PhysicalObject = function(x, y, w, h)
     }
 } 
 
+// Function to deal with detecting collisions between boxes and the boundaries of the canvas
 function screenEdgeCollDetect(obj) 
 {    
-    // Drifted off of right edge 
-    if (obj.x - (obj.width / 2) > canvas.width)
+    // Right Edge Collision
+    if (obj.x + obj.width >= canvas.width)
         obj.xVel = -obj.xVel;
     
-    // Drifted off of left edge
-    if (obj.x + (obj.width / 2) < 0)
+    // Left Edge Collision
+    if (obj.x <= 0)
         obj.xVel = -obj.xVel;
     
-    // Drifted off of bottom edge 
-    if (obj.y - (obj.height / 2) > canvas.height)
+    // Botton Edge Collision
+    if (obj.y + obj.height >= canvas.height)
         obj.yVel = -obj.yVel;
     
-    // Drifted off of top edge
-    if (obj.y + (obj.height / 2) < 0)
+    // Top Edge Collision
+    if (obj.y <= 0)
         obj.yVel = -obj.yVel;
 }
 
