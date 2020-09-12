@@ -37,23 +37,23 @@ var PhysicalObject = function(x, y, w, h)
     }
 } 
 
-function screenLoop(obj) 
+function screenEdgeCollDetect(obj) 
 {    
     // Drifted off of right edge 
     if (obj.x - (obj.width / 2) > canvas.width)
-        obj.x = -obj.width / 2;
+        obj.xVel = -obj.xVel;
     
     // Drifted off of left edge
     if (obj.x + (obj.width / 2) < 0)
-        obj.x = canvas.width + obj.width / 2;
+        obj.xVel = -obj.xVel;
     
     // Drifted off of bottom edge 
     if (obj.y - (obj.height / 2) > canvas.height)
-        obj.y = -obj.height / 2;
+        obj.yVel = -obj.yVel;
     
     // Drifted off of top edge
     if (obj.y + (obj.height / 2) < 0)
-        obj.y = canvas.height + obj.height / 2;
+        obj.yVel = -obj.yVel;
 }
 
 // Function to create a new box in the canvas (on clicking button in html)
@@ -85,7 +85,7 @@ frameRender = function()
             physicalObjects[i].height
         );
 
-        screenLoop(physicalObjects[i]);
+        screenEdgeCollDetect(physicalObjects[i]);
             
         // Tell the object to update itself for the next frame
         physicalObjects[i].nextFrame();
