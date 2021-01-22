@@ -6,6 +6,9 @@ var ctx = canvas.getContext("2d");
 // Initialise an array to hold the physical objects
 var physicalObjects = [];
 
+// Gravity var to apply to all objs Y Vel
+var gravityYVel = 0.2;
+
 var PhysicalObject = function(x, y, w, h) 
 {
     // Set the object's x/y position
@@ -17,8 +20,8 @@ var PhysicalObject = function(x, y, w, h)
     this.height = h;
     
     // Initialise the object's x and y velocity with a value of 0 (it's stationary initially)
-    this.xVel = 0.1;
-    this.yVel = 0.1;
+    this.xVel = 0;
+    this.yVel = 0;
     
     // Adjust the object's x velocity
     this.addXVel = function(vel) { 
@@ -49,8 +52,11 @@ function screenEdgeCollDetect(obj)
         obj.xVel = -obj.xVel;
     
     // Botton Edge Collision
-    if (obj.y + obj.height >= canvas.height)
-        obj.yVel = -obj.yVel;
+    if (obj.y + obj.height >= canvas.height){
+        obj.yVel = -(obj.yVel * 0.8);
+        obj.y = canvas.height - obj.height;
+    }
+        //obj.yVel = -obj.yVel;
     
     // Top Edge Collision
     if (obj.y <= 0)
@@ -63,13 +69,10 @@ function createBox(){
     frameRenderLoop(); 
         
     // Add an object into the engine at x: 100, y: 100, with a width and height of 20 pixels.
-    physicalObjects.push(new PhysicalObject(100, 100, 20, 20));  
-        
-    // Give it a little push!
-    physicalObjects[0].addXVel(0.1);
+    physicalObjects.push(new PhysicalObject(100, 100, 20, 20));
 }
 
-
+// Function to render each frame
 frameRender = function() 
 {
     // Clear view
@@ -86,13 +89,15 @@ frameRender = function()
             physicalObjects[i].height
         );
 
+        physicalObjects[i].addYVel(gravityYVel);
         screenEdgeCollDetect(physicalObjects[i]);
             
         // Tell the object to update itself for the next frame
         physicalObjects[i].nextFrame();
     }
 } 
-     
+
+// Function to handle the render loop
 frameRenderLoop = function() 
 {
     // Use requestAnimationFrame to trigger the 'frameRenderLoop' function as soon as the browser is ready to repaint
